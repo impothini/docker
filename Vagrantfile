@@ -1,4 +1,4 @@
-vagrant.configure(2) do |config|
+Vagrant.configure(2) do |config|
   config.hostmanager.enabled = true
   config.hostmanager.ignore_private_ip = false
   config.hostmanager.include_offline = true
@@ -12,9 +12,6 @@ vagrant.configure(2) do |config|
     docker.vm.network :private_network, ip: "10.0.0.17"
     docker.hostmanager.aliases = %w(docker)
     docker.vm.provision "shell", inline: <<-SHELL
-#    sudo cp /vagrant/sshd_config /etc/ssh/sshd_config
-    sudo cat /vagrant/id_rsa.pub >> /root/.ssh/authorized_keys
-    sudo service ssh restart
     SHELL
   end
 
