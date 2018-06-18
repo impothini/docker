@@ -1,0 +1,21 @@
+vagrant.configure(2) do |config|
+  config.hostmanager.enabled = true
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+
+  config.vm.define "docker" do |docker|
+    config.vm.provider "virtualbox" do |v|
+      v.name = "ansible-docker"
+    end
+    docker.vm.box = "ubuntu/trusty64"
+    docker.vm.hostname = "docker.mylab.com"
+    docker.vm.network :private_network, ip: "10.0.0.17"
+    docker.hostmanager.aliases = %w(docker)
+    docker.vm.provision "shell", inline: <<-SHELL
+    sudo cp /vagrant/sshd_config /etc/ssh/sshd_config
+    sudo cat /vagrant/id_rsa.pub >> /root/.ssh/authorized_keys
+    sudo service ssh restart
+    SHELL
+  end
+
+end
